@@ -1,0 +1,5 @@
+version="0.1"
+requires="extlib json-wheel netclient netstring str xml-light"
+archive(byte)="oembed.cma"
+archive(native)="oembed.cmxa"
+
