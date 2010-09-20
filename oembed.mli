@@ -59,6 +59,10 @@ type provider = {
 (** The format in which to parse or deparse responses. *)
 type format = FO_json | FO_xml
 
+(** Returns true if any of the URL schemes (in oEmbed scheme format) in the
+    given list match or false otherwise. *)
+val schemes_match : string list -> string -> bool
+
 (** Returns the provider for the given URL. Raises [No_provider] if none of the
     providers matched the URL. *)
 val provider_for_url : ?providers:provider list -> string -> provider

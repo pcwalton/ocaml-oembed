@@ -89,15 +89,16 @@ let kvps_to_xml kvps =
     end kvps in
     Xml.to_string(Xml.Element("oembed", [], tags))
 
+let schemes_match schemes url =
+    List.exists begin fun scheme ->
+        let re = Str.global_replace (Lazy.force backslash_star) ".*"
+            (Str.quote scheme) in
+        Str.string_match (Str.regexp re) url 0
+    end schemes
+
 let provider_for_url ?providers:(providers=embedly) url =
     try
-        List.find begin fun provider ->
-            List.exists begin fun scheme ->
-                let re = Str.global_replace (Lazy.force backslash_star) ".*"
-                    (Str.quote scheme) in
-                Str.string_match (Str.regexp re) url 0
-            end provider.pr_schemes
-        end providers
+        List.find (fun pr -> schemes_match pr.pr_schemes url) providers
     with Not_found -> raise No_provider
 
 let request_url ?providers:(providers=embedly) ?format:(format=FO_json)
