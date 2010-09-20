@@ -45,7 +45,7 @@ type response = {
     re_thumbnail_url: string option;
     re_thumbnail_width: int option;
     re_thumbnail_height: int option;
-    re_description: string;
+    re_description: string option;
 }
 
 (** Information pertaining to an oEmbed provider. [pr_schemes] is the set of

@@ -36,7 +36,7 @@ type response = {
     re_thumbnail_url: string option;
     re_thumbnail_width: int option;
     re_thumbnail_height: int option;
-    re_description: string;
+    re_description: string option;
 }
 
 type provider = {
@@ -155,7 +155,7 @@ let parse_response ?format:(format=FO_json) resp =
                 Op.map int_of_string (EH.find_option kvps "thumbnail_width");
             re_thumbnail_height =
                 Op.map int_of_string (EH.find_option kvps "thumbnail_height");
-            re_description = H.find kvps "description"
+            re_description = EH.find_option kvps "description"
         }
     with Not_found -> raise Malformed
 
@@ -203,7 +203,7 @@ let deparse_response ?format:(format=FO_json) response =
     add_string "thumbnail_url" response.re_thumbnail_url;
     add_int "thumbnail_width" response.re_thumbnail_width;
     add_int "thumbnail_height" response.re_thumbnail_height;
-    DynArray.add result ("description", `String response.re_description);
+    add_string "description" response.re_description;
 
     match format with
     | FO_json -> kvps_to_json (DynArray.to_list result)
